@@ -112,63 +112,10 @@ namespace Task_Management_Service.Implementations
             return await fileRepository.GetByIdAsync(id);
         }
 
-        /* public async Task<string> _UploadFileToGoogleDriveAsync(Files file, IFormFile formFile)
-         {
-             var clientSecrets = new ClientSecrets
-             {
-                 ClientId = googleDriveSettings.ClientId,
-                 ClientSecret = googleDriveSettings.ClientSecret
-             };
-
-             var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                 clientSecrets,
-                 new[] { DriveService.Scope.DriveFile },
-                 "user",
-                 CancellationToken.None,
-                 new FileDataStore("TokenStore", true));
-
-             var service = new DriveService(new BaseClientService.Initializer
-             {
-                 HttpClientInitializer = credential,
-                 ApplicationName = "MyDriveUploader"
-             });
-
-             var fileMetadata = new Google.Apis.Drive.v3.Data.File
-             {
-                 Name = formFile.FileName
-             };
-
-             using (var stream = formFile.OpenReadStream())
-             {
-                 var request = service.Files.Create(
-                     fileMetadata,
-                     stream,
-                     formFile.ContentType);
-                 request.Fields = "id";
-
-                 var fileResponse = await request.UploadAsync();
-
-                 if (fileResponse.Status == Google.Apis.Upload.UploadStatus.Completed)
-                 {
-                     var fileUrl = $"https://drive.google.com/file/d/{request.ResponseBody.Id}/view";
-
-                     // 👉 هنا نحفظ في الداتا بيز
-                     file.FileURL = fileUrl;
-                     await fileRepository.AddAsync(file);
-
-                     return "Success";
-                 }
-                 else
-                 {
-                     throw new Exception("Upload failed");
-                 }
-             }
-         }*/
-
         public async Task<string> UploadFileToGoogleDriveAsync(Files file, IFormFile formFile)
         {
             var privateKey = googleDriveSettings.PrivateKey
-                .Replace("\\n", "\n") // ضروري لإزالة الـ escape characters
+                .Replace("\\n", "\n")
                 .Replace("\"", "");
 
             var credential = new ServiceAccountCredential(
@@ -187,7 +134,7 @@ namespace Task_Management_Service.Implementations
             var fileMetadata = new Google.Apis.Drive.v3.Data.File
             {
                 Name = formFile.FileName,
-                Parents = new[] { googleDriveSettings.FolderId } // في حالة رفعه لمجلد معين
+                Parents = new[] { googleDriveSettings.FolderId }
             };
 
             using var stream = formFile.OpenReadStream();

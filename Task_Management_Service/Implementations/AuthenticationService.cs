@@ -143,7 +143,7 @@ namespace Task_Management_Service.Implementations
             }
             else
             {
-                user.GoogleAccessToken = googleAccessToken; // 🟢 لو موجود بالفعل، حدّث الـ access token
+                user.GoogleAccessToken = googleAccessToken;
                 await userManager.UpdateAsync(user);
             }
             var accessToken = new JwtSecurityToken(
@@ -214,8 +214,7 @@ namespace Task_Management_Service.Implementations
             }
 
             var jwt = await GetJWTToken(user);
-            /* user.GoogleAccessToken = (jwt.AccessToken);
-             await userManager.UpdateAsync(user);*/
+
             return jwt;
         }
     }

@@ -11,7 +11,7 @@
 
 
         public virtual ICollection<Taskss> Tasksses { get; set; }
-        public virtual ICollection<ProjectMembers> ProjectMembers { get; set; }
+        //public virtual ICollection<ProjectMembers> ProjectMembers { get; set; }
 
     }
 }

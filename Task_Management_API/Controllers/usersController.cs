@@ -7,10 +7,11 @@ namespace E_Learning_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApplicationUserController : AppControllerBase
+    public class usersController : AppControllerBase
     {
 
-        [HttpPost("Register")]
+        //[HttpPost("Register")]
+        [HttpPost]
         public async Task<IActionResult> RegisterAsync(AddUserCommand addUser)
         {
 
@@ -18,7 +19,14 @@ namespace E_Learning_API.Controllers
             return NewResult(result);
         }
 
-        [HttpPost("google-login")]
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync(LoginCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return NewResult(result);
+        }
+
+        [HttpPost("login/google")]
         public async Task<IActionResult> RegisterWithGoogleAsync(LoginWithGoogleCommand addUser)
         {
 
@@ -26,21 +34,16 @@ namespace E_Learning_API.Controllers
             return NewResult(result);
         }
 
-        [HttpPost("microsoft-login")]
+        [HttpPost("login/microsoft")]
         public async Task<IActionResult> RegisterWithMicrosoftAsync([FromBody] LoginWithMicrosoftCommand request)
         {
             var result = await Mediator.Send(request);
             return NewResult(result);
         }
 
-        [HttpPost("Login")]
-        public async Task<IActionResult> LoginAsync(LoginCommand command)
-        {
-            var result = await Mediator.Send(command);
-            return NewResult(result);
-        }
 
-        [HttpPost("ChangePassword")]
+
+        [HttpPut("me/password")]
         public async Task<IActionResult> ChangePasswordAsync(ChangePasswordCommand command)
         {
             var result = await Mediator.Send(command);
@@ -50,7 +53,8 @@ namespace E_Learning_API.Controllers
 
 
         //  [Authorize]
-        [HttpPut("EditProfile")]
+        //[HttpPut("EditProfile")]
+        [HttpPut("me")]
         public async Task<IActionResult> EditUserAsync(EditUserCommand command)
         {
             var result = await Mediator.Send(command);
@@ -58,15 +62,16 @@ namespace E_Learning_API.Controllers
         }
 
         //  [Authorize(Roles = "Admin")]
-        [HttpDelete("DeleteUser/{id}")]
-        public async Task<IActionResult> DeleteUserAsync([FromRoute] string id)
-        {
-            var result = await Mediator.Send(new DeleteUserCommand(id));
-            return NewResult(result);
-        }
+        /* [HttpDelete("DeleteUser/{id}")]
+         public async Task<IActionResult> DeleteUserAsync([FromRoute] string id)
+         {
+             var result = await Mediator.Send(new DeleteUserCommand(id));
+             return NewResult(result);
+         }*/
 
 
-        [HttpDelete("DeleteUser")]
+        /*[HttpDelete("DeleteUser")]*/
+        [HttpDelete("me")]
         public async Task<IActionResult> DeleteUserByTokenAsync()
         {
             var result = await Mediator.Send(new DeleteUserByTokenCommand());
@@ -74,7 +79,8 @@ namespace E_Learning_API.Controllers
         }
 
         //   [Authorize(Roles = "Admin")]
-        [HttpGet("GetUserByToken")]
+        //[HttpGet("GetUserByToken")]
+        [HttpGet("me")]
         public async Task<IActionResult> GetUserByIdAsync()
         {
             var result = await Mediator.Send(new GetUserByIdQuery());
@@ -82,7 +88,8 @@ namespace E_Learning_API.Controllers
         }
 
         //    [Authorize(Roles = "Admin")]
-        [HttpGet("Paginated")]
+        //[HttpGet("Paginated")]
+        [HttpGet]
         public async Task<IActionResult> GetUserPaginatedListAsync([FromQuery] GetUserPaginatedQuery query)
         {
             var result = await Mediator.Send(query);

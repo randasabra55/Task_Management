@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿/*using System.ComponentModel.DataAnnotations.Schema;
 using Task_Management_Data.Entities.Identity;
 
 namespace Task_Management_Data.Entities
@@ -15,7 +15,8 @@ namespace Task_Management_Data.Entities
         [ForeignKey("User")]
         public string UserId { get; set; }
         public virtual User User { get; set; }
-        /* ProjectId(FK)
-        UserId(FK)*/
+        *//* ProjectId(FK)
+        UserId(FK)*//*
     }
 }
+*/

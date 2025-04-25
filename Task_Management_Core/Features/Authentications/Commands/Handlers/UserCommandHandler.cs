@@ -150,7 +150,7 @@ namespace Task_Management_Core.Features.Authentications.Commands.Handlers
 
         public async Task<Response<string>> Handle(DeleteUserByTokenCommand request, CancellationToken cancellationToken)
         {
-            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
             {
                 //return Unauthorized<string>("User is not authenticated. Please login and try again.");

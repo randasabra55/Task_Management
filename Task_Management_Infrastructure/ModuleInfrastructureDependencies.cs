@@ -14,12 +14,7 @@ namespace Task_Management_Infrastructure
             services.AddTransient<IReviewRepository, ReviewRepository>();
             services.AddTransient<IFileRepository, FileRepository>();
 
-            /*services.AddTransient<ILessonRepository, LessonRepository>();
-            services.AddTransient<IQuestionRepository, QuestionRepository>();
-            services.AddTransient<IAnswerRepository, AnswerRepository>();
-            services.AddTransient<ICertificateRepository, CertificateRepository>();
-            services.AddTransient<IQuizEnrollmentRepository, QuizEnrollmentRepository>();
-            services.AddTransient<IUserAnswerRepository, UserAnswerRepository>();*/
+
 
 
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));

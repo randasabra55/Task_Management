@@ -22,10 +22,7 @@ namespace Task_Management_Service
 
 
 
-            /* services.AddTransient<ILessonService, LessonService>();
-             services.AddTransient<IQuizEnrollmentService, QuizEnrollmentService>();
-             services.AddTransient<IUserAnswerService, UserAnswerService>();
-             services.AddTransient<IQuizUserService, QuizUserService>();*/
+
 
 
             return services;

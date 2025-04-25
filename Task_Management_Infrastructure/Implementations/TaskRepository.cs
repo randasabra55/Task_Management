@@ -15,6 +15,16 @@ namespace Task_Management_Infrastructure.Implementations
             tasksses = dbContext.Set<Taskss>();
         }
 
+        public List<Taskss> GetAllTasksForSpecificProject(int projectId)
+        {
+            return tasksses.AsNoTracking().Include(t => t.Files).Where(t => t.ProjectId == projectId).ToList();
+        }
+
+        public List<Taskss> GetAllTasksForUser(string userId)
+        {
+            return tasksses.AsNoTracking().Include(t => t.Files).Where(t => t.UserId == userId).ToList();
+        }
+
         public IQueryable<Taskss> GetTaskssesQuerable()
         {
             return tasksses.AsNoTracking().AsQueryable();

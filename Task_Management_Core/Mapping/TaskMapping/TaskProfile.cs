@@ -10,6 +10,7 @@ namespace Task_Management_Core.Mapping.TaskMapping
             EditTaskMapping();
             GetTaskByIdMapping();
             GetTaskPaginatedMapping();
+            GetTasksForProjectMapping();
         }
     }
 }

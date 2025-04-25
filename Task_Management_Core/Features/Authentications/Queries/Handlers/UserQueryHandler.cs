@@ -26,7 +26,7 @@ namespace Task_Management_Core.Features.Authentications.Queries.Handlers
         }
         public async Task<Response<GetUserByIdResponse>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var userId = httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = userManager.Users.FirstOrDefault(u => u.Id == userId /*request.Id*/);
             if (user == null)
             {

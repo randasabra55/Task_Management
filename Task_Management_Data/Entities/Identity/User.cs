@@ -12,7 +12,7 @@ namespace Task_Management_Data.Entities.Identity
 
 
 
-        public virtual ICollection<ProjectMembers> ProjectMembers { get; set; }
+        //public virtual ICollection<ProjectMembers> ProjectMembers { get; set; }
         public virtual ICollection<Taskss> Tasksses { get; set; }
         public virtual ICollection<Notifications> Notifications { get; set; }
         public virtual ICollection<Reviews> Reviews { get; set; }
