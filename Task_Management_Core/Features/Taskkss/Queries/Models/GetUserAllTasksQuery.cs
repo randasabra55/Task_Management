@@ -6,11 +6,11 @@ namespace Task_Management_Core.Features.Taskkss.Queries.Models
 {
     public class GetUserAllTasksQuery : IRequest<Response<List<GetAllTasksResult>>>
     {
-        public string UserId { get; set; }
+        /*public string UserId { get; set; }
 
         public GetUserAllTasksQuery(string userId)
         {
             UserId = userId;
-        }
+        }*/
     }
 }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using Task_Management_Core.Bases;
 using Task_Management_Core.Features.Taskkss.Queries.Models;
 using Task_Management_Core.Features.Taskkss.Queries.Results;
@@ -18,11 +20,13 @@ namespace Task_Management_Core.Features.Taskkss.Queries.Handlers
         IMapper mapper;
         ITaskService taskService;
         private readonly Context _dbContext;
-        public TaskQueryHandler(IMapper mapper, ITaskService taskService, Context dbContext)
+        IHttpContextAccessor httpContextAccessor;
+        public TaskQueryHandler(IMapper mapper, ITaskService taskService, Context dbContext, IHttpContextAccessor httpContextAccessor)
         {
             this.mapper = mapper;
             this.taskService = taskService;
             this._dbContext = dbContext;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Response<GetTaskResult>> Handle(GetTaskByIdQuery request, CancellationToken cancellationToken)
@@ -55,10 +59,11 @@ namespace Task_Management_Core.Features.Taskkss.Queries.Handlers
                 Source = "Internal"
             })
             .ToListAsync(cancellationToken);*/
-            var externalTaskss = _dbContext.externalAPITasks
-                           .Where(t => t.UserId == request.UserId);
+            /*var externalTaskss = _dbContext.externalAPITasks
+                           .Where(t => t.UserId == request.UserId);*/
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var externalTasks = await _dbContext.externalAPITasks
-                .Where(t => t.UserId == request.UserId)
+                .Where(t => t.UserId == userId /*request.UserId*/)
                 .Select(t => new GetAllTasksResult
                 {
                     Title = t.Title,

@@ -2,8 +2,10 @@
 
 //using E_Learning_Service.Abstracts;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using Task_Management_Core.Bases;
 using Task_Management_Core.Features.Authentications.Commands.Models;
 using Task_Management_Data.Entities.Identity;
@@ -19,20 +21,21 @@ namespace Task_Management_Core.Features.Authentications.Commands.Handlers
                                     IRequestHandler<EditUserCommand, Response<string>>,
                                     IRequestHandler<DeleteUserCommand, Response<string>>,
                                     IRequestHandler<LoginWithGoogleCommand, Response<string>>,
-                                    IRequestHandler<LoginWithMicrosoftCommand, Response<JwtAuthResult>>
-    // IRequestHandler<DeleteUserByTokenCommand, Response<JwtAuthResult>>
+                                    IRequestHandler<LoginWithMicrosoftCommand, Response<JwtAuthResult>>,
+                                    IRequestHandler<DeleteUserByTokenCommand, Response<string>>
 
 
     {
         IAuthenticationService authenticationService;
         IMapper mapper;
         UserManager<User> userManager;
-
-        public UserCommandHandler(IAuthenticationService authenticationService, IMapper mapper, UserManager<User> userManager)
+        IHttpContextAccessor httpContextAccessor;
+        public UserCommandHandler(IAuthenticationService authenticationService, IMapper mapper, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
         {
             this.authenticationService = authenticationService;
             this.mapper = mapper;
             this.userManager = userManager;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Response<string>> Handle(AddUserCommand request, CancellationToken cancellationToken)
@@ -145,30 +148,34 @@ namespace Task_Management_Core.Features.Authentications.Commands.Handlers
             return Success(res);
         }
 
-        /* public async Task<Response<JwtAuthResult>> Handle(DeleteUserByTokenCommand request, CancellationToken cancellationToken)
-         {
-             var userId = ValidateToken(request.Token);
-             if (userId == null)
-             {
-                 return new Response<string>("Invalid token", false);
-             }
+        public async Task<Response<string>> Handle(DeleteUserByTokenCommand request, CancellationToken cancellationToken)
+        {
+            var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                //return Unauthorized<string>("User is not authenticated. Please login and try again.");
 
-             // 2. بحث عن اليوزر في قاعدة البيانات
-             var user = await _userRepository.GetUserByIdAsync(userId.Value);
-             if (user == null)
-             {
-                 return new Response<string>("User not found", false);
-             }
-
-             // 3. حذف اليوزر
-             var result = await _userRepository.DeleteUserAsync(userId.Value);
-             if (!result)
-             {
-                 return new Response<string>("Error deleting user", false);
-             }
-
-             // 4. إرجاع النتيجة
-             return new Response<string>("User deleted successfully", true);
-         }*/
+                return BadRequest<string>("Invalid Token or User not authenticated.");
+            }
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound<string>("User not found");
+            var roles = await userManager.GetRolesAsync(user);
+            if (roles.Any())
+            {
+                var roleRemovalResult = await userManager.RemoveFromRolesAsync(user, roles);
+                if (!roleRemovalResult.Succeeded)
+                {
+                    var errors = string.Join(", ", roleRemovalResult.Errors.Select(e => e.Description));
+                    return BadRequest<string>($"Error removing roles: {errors}");
+                }
+            }
+            var result = await userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                return BadRequest<string>($"Unable to delete user: {errors}");
+            }
+            return Success("User deleted successfully");
+        }
     }
 }

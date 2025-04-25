@@ -65,11 +65,19 @@ namespace E_Learning_API.Controllers
             return NewResult(result);
         }
 
-        //   [Authorize(Roles = "Admin")]
-        [HttpGet("GetUserById/{id}")]
-        public async Task<IActionResult> GetUserByIdAsync([FromRoute] string id)
+
+        [HttpDelete("DeleteUser")]
+        public async Task<IActionResult> DeleteUserByTokenAsync()
         {
-            var result = await Mediator.Send(new GetUserByIdQuery(id));
+            var result = await Mediator.Send(new DeleteUserByTokenCommand());
+            return NewResult(result);
+        }
+
+        //   [Authorize(Roles = "Admin")]
+        [HttpGet("GetUserByToken")]
+        public async Task<IActionResult> GetUserByIdAsync()
+        {
+            var result = await Mediator.Send(new GetUserByIdQuery());
             return NewResult(result);
         }
 

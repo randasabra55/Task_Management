@@ -54,14 +54,14 @@ namespace Task_Management_API.Controllers
             var result = await Mediator.Send(new GetUserAllTasksQuery(userId));
             return Ok(result);
         }*/
-        [HttpGet("all/{id}")]
-        public async Task<IActionResult> GetAllTasksForCurrentUser(string id)
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllTasksForCurrentUser()
         {
             /*var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();*/
 
-            var result = await Mediator.Send(new GetUserAllTasksQuery(id));
+            var result = await Mediator.Send(new GetUserAllTasksQuery());
             return Ok(result);
         }
     }

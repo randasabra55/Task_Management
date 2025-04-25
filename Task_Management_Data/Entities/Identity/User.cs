@@ -7,7 +7,7 @@ namespace Task_Management_Data.Entities.Identity
     {
         public string FullName { get; set; }
         public string Role { get; set; }
-        public string GoogleAccessToken { get; set; }
+        public string? GoogleAccessToken { get; set; }
 
 
 
