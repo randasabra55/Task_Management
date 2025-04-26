@@ -36,7 +36,8 @@ namespace Task_Management_API.Controllers
         }
 
         //[HttpGet("GetReviewsPaginatedForSpecificTask/{id}")]
-        [HttpGet("{taskId}")]
+        //[HttpGet("{taskId}")]
+        [HttpGet("tasks/{taskId}")]
         [SwaggerOperation(Summary = "جلب الكومنتات لتاسك معين", OperationId = "GetReviewsForTask")]
         public async Task<IActionResult> GetReviewsPaginatedAsync(int taskId)
         {

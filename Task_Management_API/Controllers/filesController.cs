@@ -62,7 +62,8 @@ namespace Task_Management_API.Controllers
         }
 
         //[HttpGet("GetFilesForTaskId/{Id}")]
-        [HttpGet("{taskId}/p")]
+        //[HttpGet("{taskId}/p")]
+        [HttpGet("tasks/{taskId}/files")]
         [SwaggerOperation(Summary = "جلب كل الملفات الخاصة بتاسك معينة", OperationId = "GetFilesByTaskId")]
         public async Task<IActionResult> GetFileForTaskIdAsync([FromRoute] int taskId)
         {

@@ -42,7 +42,8 @@ namespace Task_Management_API.Controllers
             return NewResult(result);
         }
 
-        [HttpGet("all")]
+        //[HttpGet("all")]
+        [HttpGet("tasks")]
         [SwaggerOperation(Summary = "جلب كل التاسكات بتفاصيلها")]
         public async Task<IActionResult> GetTasksPaginatedAsync([FromQuery] GetTasksPaginatedQuery query)
         {
@@ -60,7 +61,8 @@ namespace Task_Management_API.Controllers
             var result = await Mediator.Send(new GetUserAllTasksQuery(userId));
             return Ok(result);
         }*/
-        [HttpGet("google-task")]
+        //[HttpGet("google-task")]
+        [HttpGet("external-tasks")]
         [SwaggerOperation(Summary = "جلب تاسكات من Google Tasks")]
         public async Task<IActionResult> GetAllTasksForCurrentUser()
         {
@@ -72,21 +74,23 @@ namespace Task_Management_API.Controllers
             return Ok(result);
         }
 
-
-        [HttpGet("getTasksForSpecificProject/{id}")]
-        //[SwaggerOperation(Summary = "جلب تاسكات من Google Tasks")]
-        public async Task<IActionResult> GetTasksForspecificProject(int id)
-        {
-            var result = await Mediator.Send(new GetTasksForSpecificProjectQuery(id));
-            return Ok(result);
-        }
-
-        [HttpGet("getTasksForUser")]
-        //[SwaggerOperation(Summary = "جلب تاسكات من Google Tasks")]
+        [HttpGet("internal-tasks")]
+        [SwaggerOperation(Summary = "جلب التاسكات الداخلية التى أضافها المدير للمستخدم")]
         public async Task<IActionResult> GetTasksForUser()
         {
             var result = await Mediator.Send(new GetInternalTasksForUserQuery());
             return Ok(result);
         }
+        //[HttpGet("getTasksForSpecificProject/{id}")]
+        [HttpGet("projects/{projectId}")]
+        [SwaggerOperation(Summary = "جلب كل التاسكات الخاصة ببروجيكت معين")]
+        public async Task<IActionResult> GetTasksForspecificProject(int projectId)
+        {
+            var result = await Mediator.Send(new GetTasksForSpecificProjectQuery(projectId));
+            return Ok(result);
+        }
+
+        //[HttpGet("getTasksForUser")]
+
     }
 }
